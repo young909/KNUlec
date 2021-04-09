@@ -2,12 +2,13 @@
 #include<stdio.h>
 #include<string.h>
 
-typedef struct __stack {
+typedef struct __queue {
 	int data;
-	struct __stack *next;
-}stack;
+	struct __queue* next;
+}queue;
 
-stack* top;
+queue* front;
+queue* back;
 
 int main(void) {
 	int n;
@@ -19,15 +20,17 @@ int main(void) {
 		if (!strcmp(op, "push")) {
 			int input;
 			scanf("%d", &input);
-			stack *newEl = (stack*)malloc(sizeof(stack));
+			queue* newEl = (queue*)malloc(sizeof(queue));
 			newEl->data = input;
 			newEl->next = NULL;
-			
-			if (size == 0)
-				top = newEl;
+
+			if (size == 0) {
+				front = newEl;
+				back = newEl;
+			}
 			else {
-				newEl->next = top;
-				top = newEl;
+				back->next = newEl;
+				back = newEl;
 			}
 			size++;
 		}
@@ -35,8 +38,8 @@ int main(void) {
 			if (size == 0)
 				printf("-1\n");
 			else {
-				stack* temp = top;
-				top = top->next;
+				queue* temp = front;
+				front = front->next;
 				printf("%d\n", temp->data);
 				free(temp);
 				size--;
@@ -51,14 +54,21 @@ int main(void) {
 			else
 				printf("0\n");
 		}
+		else if(!strcmp(op, "front")){
+			if (size == 0)
+				printf("-1\n");
+			else {
+				printf("%d\n", front->data);
+			}
+		}
 		else {
 			if (size == 0)
 				printf("-1\n");
 			else {
-				printf("%d\n",top->data);
+				printf("%d\n", back->data);
 			}
 		}
 	}
-	
+
 	return 0;
 }
